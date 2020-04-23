@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0c50c0cd-a6a8-45f1-9209-196c4453a501" >
 		<http:listener-connection host="0.0.0.0" port="8181" />
 	</http:listener-config>
@@ -11,6 +12,16 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<http:listener doc:name="Listener" doc:id="24fd2480-1f0b-4f1a-ac15-181e48378256" config-ref="HTTP_Listener_config" path="/abc"/>
 		<logger level="INFO" doc:name="Logger" doc:id="e0ace8d4-b3fa-45bb-a48b-47967e1c56a9" message="The flow is started ---&gt;"/>
 		<set-payload value="#['Hi How are you']" doc:name="Set Payload" doc:id="8c8a561c-283e-4fa4-8fea-977b74839da9" />
+		<ee:transform doc:name="Transform Message" doc:id="935f3075-b16f-47af-b850-2f9ea3016c27" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	msg: payload ++ " bye:)"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="e8a299a8-b9e8-4075-9211-4104977d0d3b" message="The final out put----&gt;#[payload]"/>
 	</flow>
 </mule>
